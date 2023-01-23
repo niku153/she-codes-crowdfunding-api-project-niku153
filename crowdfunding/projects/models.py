@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from users.models import CustomUser
+from django.db.models import Sum
 
 # Create your models here.
 
@@ -15,6 +17,11 @@ class Project(models.Model):
         on_delete=models.CASCADE,
         related_name='owner_projects'
         )
+    bookmarked_by = models.ManyToManyField(CustomUser, related_name='bookmarked_projects')
+
+    @property
+    def total(self):
+        return self.pledges.aggregate(sum=models.Sum('amount'))['sum']
 
 class Pledge(models.Model):
     amount = models.IntegerField()
