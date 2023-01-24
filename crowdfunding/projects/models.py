@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from users.models import CustomUser
-from django.db.models import Sum
 
 # Create your models here.
 
@@ -33,4 +32,4 @@ class Pledge(models.Model):
         get_user_model(),
         on_delete=models.CASCADE,
         related_name='supporter_pledges'
-        )
+        ) 

@@ -40,4 +40,3 @@ class ProjectDetailSerializer(ProjectSerializer):
         instance.save()
         return instance
 
-

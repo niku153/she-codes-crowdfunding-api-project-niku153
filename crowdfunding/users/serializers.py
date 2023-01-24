@@ -10,6 +10,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         username = serializers.CharField(max_length=200)
         email = serializers.CharField(max_length=200)
         extra_kwargs = {'password': {'write_only': True}}
+        bookmarked_projects = serializers.ReadOnlyField()
 
     def create(self, validated_data):
         user = CustomUser.objects.create(**validated_data)
