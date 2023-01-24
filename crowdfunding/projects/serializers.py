@@ -5,11 +5,18 @@ from .models import Project, Pledge
 from users.serializers import CustomUserSerializer
 
 class PledgeSerializer(serializers.ModelSerializer):
+    supporter = serializers.SerializerMethodField()
     class Meta:
         model = Pledge
         fields = '__all__'
         read_only_fields = ['id', 'supporter']
 
+    def get_supporter(self, instance):
+        if instance.anonymous:
+            return "anonymous"
+        else:
+            return instance.supporter.username 
+            
 class ProjectSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     title = serializers.CharField(max_length=200)
