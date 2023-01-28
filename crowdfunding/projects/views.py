@@ -6,7 +6,8 @@ from rest_framework import status, generics, permissions
 
 from .models import Project, Pledge
 from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer, CustomUserSerializer
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsOwnerOrReadOnly, IsSupporterOrReadOnly
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Create your views here.
 
@@ -53,19 +54,44 @@ class ProjectDetail(APIView):
             instance=project,
             data=data,
             partial=True)
-        
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors)
 
+    def delete(self, request, pk):
+        project = self.get_object(pk)
+        project.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+        
+       
+
+class PledgeDetail(generics.RetrieveUpdateDestroyAPIView):
+
+    permission_classes = [
+        IsSupporterOrReadOnly
+        ]
+
+    queryset = Pledge.objects.all()
+    serializer_class = PledgeSerializer
+    
+
 
 class PledgeList(generics.ListCreateAPIView):
     queryset = Pledge.objects.all()
     serializer_class = PledgeSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['supporter', 'project']
 
     def perform_create(self, serializer):
         serializer.save(supporter=self.request.user)
+
+    def get(self, request):
+        pledges = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(pledges, many=True)
+        return Response(serializer.data)
 
 class LikeListCreate(generics.ListCreateAPIView):
     serializer_class = CustomUserSerializer
@@ -84,6 +110,9 @@ class LikeListCreate(generics.ListCreateAPIView):
         serializer = self.get_serializer(project.bookmarked_by.all(), many=True)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+
         
 
 #1: get project from pk
