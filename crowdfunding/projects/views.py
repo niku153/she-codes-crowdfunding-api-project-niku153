@@ -88,10 +88,10 @@ class PledgeList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(supporter=self.request.user)
 
-    def get(self, request):
-        pledges = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(pledges, many=True)
-        return Response(serializer.data)
+    # def get(self, request):
+    #     pledges = self.filter_queryset(self.get_queryset())
+    #     serializer = self.get_serializer(pledges, many=True)
+    #     return Response(serializer.data)
 
 class LikeListCreate(generics.ListCreateAPIView):
     serializer_class = CustomUserSerializer
