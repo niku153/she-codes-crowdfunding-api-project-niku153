@@ -25,6 +25,7 @@ class ProjectSerializer(serializers.Serializer):
     image = serializers.URLField()
     is_open = serializers.BooleanField()
     date_created = serializers.DateTimeField()
+    closing_date = serializers.DateTimeField()
     owner = serializers.ReadOnlyField(source='owner.id')
     total = serializers.ReadOnlyField()
 
