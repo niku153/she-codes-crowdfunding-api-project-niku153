@@ -7,6 +7,10 @@ from .serializers import CustomUserSerializer, ChangePasswordSerializer
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsLoggedIn
 
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+
 class CustomUserList(APIView):
     
     def get(self, request):
@@ -38,3 +42,10 @@ class ChangePasswordView(generics.UpdateAPIView):
     queryset = CustomUser.objects.all()
     permission_classes = (IsAuthenticated, IsLoggedIn)
     serializer_class = ChangePasswordSerializer
+
+
+class CustomObtainAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
+        token = Token.objects.get(key=response.data['token'])
+        return Response({'token': token.key, 'id': token.user_id})
