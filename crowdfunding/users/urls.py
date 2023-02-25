@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
     path('', views.CustomUserList.as_view(), name='customuser-list'),
     path('<int:pk>/', views.CustomUserDetail.as_view(), name='customuser-detail'),
+    path('me/', views.AuthenticatedUser.as_view(), name='me'),
     path('<int:pk>/change_password/', views.ChangePasswordView.as_view(), name='auth_change_password'),
 ]
 
