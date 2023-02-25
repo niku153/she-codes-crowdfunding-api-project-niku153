@@ -17,7 +17,6 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
 
-from users.views import CustomObtainAuthToken
 
 
 from django.http import JsonResponse
@@ -37,6 +36,5 @@ urlpatterns = [
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
     path('users/', include('users.urls')),
     path("", include('projects.urls')),
-    path("authenticate/", CustomObtainAuthToken),
 
 ]
