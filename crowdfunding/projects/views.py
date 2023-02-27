@@ -54,10 +54,13 @@ class ProjectDetail(APIView):
             instance=project,
             data=data,
             partial=True)
+        print(data)
 
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
+        
+        
         return Response(serializer.errors)
 
     def delete(self, request, pk):
