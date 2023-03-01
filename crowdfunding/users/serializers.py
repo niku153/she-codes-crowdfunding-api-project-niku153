@@ -5,7 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id','email', 'username', 'password']
+        fields = ['id','email', 'username', 'password', 'bookmarked_projects']
         id = serializers.ReadOnlyField()
         username = serializers.CharField(max_length=200)
         email = serializers.CharField(max_length=200)
